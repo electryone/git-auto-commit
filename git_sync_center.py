@@ -42,45 +42,62 @@ def send_mail(subject, message):
 
 
 def job():
-    f = open('content.txt', 'a')
-    f.write(time.asctime(time.localtime(time.time())) + '\n')
-    f.close()
-    date = datetime.datetime.today().isoformat()[0:10]
+#    f = open('content.txt', 'a')
+#    f.write(time.asctime(time.localtime(time.time())) + '\n')
+#    f.close()
+#    date = datetime.datetime.today().isoformat()[0:10]
     #status = subprocess.run(["git", "status"])
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(status)
-    print('**********start git add.**********')
-    gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(gadd)
-    print('**********git add done.**********')
-    print('**********start git commit.**********')
+    if "fatal: unable to access" in str(status.stdout):
+        print("network error")
+        return False
+    elif "nothing to commit" in str(status.stdout):
+        print("nothing to commit, return")
+        return True
+    elif "no changes added to commit" in str(status.stdout):
+        gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        print('add message:{0}'.format(str(gadd.stdout)))
     gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(gcom)
-    print('**********git commit done.**********')
-    print('**********start git push.**********')
-    gpush = subprocess.run(["git", "push", "origin", "master"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print(gpush)
-    print('**********git push done.**********')
-    #send_mail("git a commit", str(date))  # 发送邮件
+    if "fatal: unable to access" in str(gcom.stdout):
+        print("network error")
+        return False
+    print('commit message:{0}'.format(str(gadd.stdout)))
+    return True
+        
+#    print(status)
+#    print('**********start git add.**********')
+#    gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+#    print(gadd)
+#    print('**********git add done.**********')
+#    print('**********start git commit.**********')
+#    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+#    print(gcom)
+#    print('**********git commit done.**********')
+#    print('**********start git push.**********')
+#    gpush = subprocess.run(["git", "push", "origin", "master"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+#    print(gpush)
+#    print('**********git push done.**********')
+#    #send_mail("git a commit", str(date))  # 发送邮件
     #time.sleep(61)
 
 
 def main(h, m):
+    flag = job
+    
     '''h表示设定的小时，m为设定的分钟'''
+    count = 0
     while True:
-        job()
-        break
-        # 判断是否达到设定时间，例如0:00
-        while True:
-            now = datetime.datetime.now()
-            print(now.hour, ' ', now.minute, ' ', now.microsecond)
-            # 到达设定时间，结束内循环
-            if now.hour == h and now.minute == m:
-                break
-            # 不到时间就等20秒之后再次检测
-            time.sleep(20)
-        # 做正事，一天做一次
-        #job()
+        flag = job()
+        if(flag == False):
+            count +=1
+        else: 
+            print("check ok")
+            return
+        time.sleep(5)
+        if(count >=3):
+            print("network fail count {0}, send message".format(count))
+            send_mail("git a commit", str(date))  # 发送邮件
+            break
 
 
 print(time.asctime(time.localtime(time.time())))
