@@ -51,12 +51,12 @@ def remote_job(arr):
     pull_status = subprocess.run(["git", "pull",'-f',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if "fatal: unable to access" in str(pull_status.stdout):
         print("network error")
-        flag1= False
-    elif not 'Already up to date' in str(pull_status.stdout):
-        push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        if "fatal: unable to access" in str(push_status.stdout):
-            print("network error")
-            flag1 = False
+        return False
+    
+    push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if "fatal: unable to access" in str(push_status.stdout):
+        print("network error")
+        flag1 = False
     return flag1
 
 
@@ -76,14 +76,7 @@ def main(h, m):
             count2 +=1
         else:
             print("check {0} ok".format(origin2_arr[0]))
-        
-        time.sleep(3)
-        flag = remote_job(origin1_arr)
-        if(flag == False):
-            count1 +=1
-        else:
-            print("check {0} ok".format(origin1_arr[0]))
-        
+
         time.sleep(5)
         #重新检查一遍，防止网络问题导致失败
         if(count1 >1):
