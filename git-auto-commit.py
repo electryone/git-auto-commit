@@ -45,7 +45,8 @@ def job():
     f = open('content.txt', 'a')
     f.write(time.asctime(time.localtime(time.time())) + '\n')
     date = datetime.datetime.today().isoformat()[0:10]
-    status = subprocess.run(["git", "status"])
+    #status = subprocess.run(["git", "status"])
+    status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(status)
     print('**********start git add.**********')
     gadd = subprocess.run(["git", "add", "."])
