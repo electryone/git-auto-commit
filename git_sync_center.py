@@ -45,7 +45,7 @@ def job():
 #    f = open('content.txt', 'a')
 #    f.write(time.asctime(time.localtime(time.time())) + '\n')
 #    f.close()
-    date = datetime.datetime.today().isoformat()[0:10]
+    date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
     #status = subprocess.run(["git", "status"])
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if "fatal: unable to access" in str(status.stdout):
