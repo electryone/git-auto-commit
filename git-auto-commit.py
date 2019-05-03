@@ -64,6 +64,7 @@ def main(h, m):
     '''h表示设定的小时，m为设定的分钟'''
     while True:
         job()
+        break
         # 判断是否达到设定时间，例如0:00
         while True:
             now = datetime.datetime.now()
