@@ -41,49 +41,73 @@ def send_mail(subject, message):
         print("Error: 无法发送邮件")
 
 
-origin1_arr =['https://github.com/electryone/git-auto-commit.git','origin','master']
-origin2_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master']
+origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master']
+origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master']
 
-def remote_job():
-    
-    date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
+def remote_job(arr):
+    #date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
     #处理origin1_arr
-    pull_status = subprocess.run(["git", "pull",'-r',origin1_arr[1],origin1_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    flag1 = True
+    pull_status = subprocess.run(["git", "pull",'-f',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if "fatal: unable to access" in str(pull_status.stdout):
         print("network error")
-        return False
-    
-    push_status = subprocess.run(["git", "push",'-u',origin1_arr[1],origin1_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if "fatal: unable to access" in str(push_status.stdout):
-        print("network error")
-        return False
-    
-     #处理origin2_arr
-    pull2_status = subprocess.run(["git", "pull",'-r',origin2_arr[1],origin2_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if "fatal: unable to access" in str(pull2_status.stdout):
-        print("network error")
-        return False
-    
-    push2_status = subprocess.run(["git", "push",'-u',origin2_arr[1],origin2_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if "fatal: unable to access" in str(push2_status.stdout):
-        print("network error")
-        return False
+        flag1= False
+    elif not 'Already up to date' in str(pull_status.stdout):
+        push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+        if "fatal: unable to access" in str(push_status.stdout):
+            print("network error")
+            flag1 = False
+    return flag1
+
 
 def main(h, m):
     '''h表示设定的小时，m为设定的分钟'''
-    count = 0
+    count1= 0
+    count2= 0
     while True:
-        flag = job()
+        flag = remote_job(origin1_arr)
         if(flag == False):
-            count +=1
-        else: 
-            print("check ok")
-            return
+            count1 +=1
+        else:
+            print("check {0} ok".format(origin1_arr[0]))
+       
+        flag = remote_job(origin2_arr)
+        if(flag == False):
+            count2 +=1
+        else:
+            print("check {0} ok".format(origin2_arr[0]))
+        
+        time.sleep(3)
+        flag = remote_job(origin1_arr)
+        if(flag == False):
+            count1 +=1
+        else:
+            print("check {0} ok".format(origin1_arr[0]))
+        
         time.sleep(5)
-        if(count >=3):
-            print("network fail count {0}, send message".format(count))
-            send_mail("git a commit", str(date))  # 发送邮件
-            break
+        #重新检查一遍，防止网络问题导致失败
+        if(count1 >1):
+             flag = remote_job(origin1_arr)
+             if(flag == True):
+                 count1 = 0
+                 
+        if(count2 >1):
+             flag = remote_job(origin2_arr)
+             if(flag == True):
+                 count2 = 0       
+        
+        if(count1 >0 or count2 >0):
+            print("network fail count1 {0} count2{1}, send message".format(count1,count2))
+            date =time.asctime(time.localtime(time.time()))
+            string = 'git issue:'
+            if(count1 >0):
+                string += "network error: {0} \n".format(origin1_arr[0])
+            if(count2 >0):
+                string += "network error: {0} \n".format(origin2_arr[0])   
+            send_mail('git issue', string)  # 发送邮件
+        else:
+            print("check ok")
+        break
 
 
 print(time.asctime(time.localtime(time.time())))
