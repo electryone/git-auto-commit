@@ -56,7 +56,7 @@ def job():
         return True
     elif "no changes added to commit" in str(status.stdout):
         gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-        print('add message:{0}'.format(str(gadd.stdout)))
+#        print('add message:{0}'.format(str(gadd.stdout)))
     gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if "fatal: unable to access" in str(gcom.stdout):
         print("network error")
