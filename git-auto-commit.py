@@ -27,8 +27,8 @@ def send_mail(subject, message):
 
     # 创建一个带附件的实例
     message = MIMEText(message, 'plain', 'utf-8')
-    message['From'] = "*****@163.com"  # 邮件发送人
-    message['To'] = "*****@163.com"  # 邮件接收人
+    message['From'] = "electrycache1@163.com"  # 邮件发送人
+    message['To'] = "electrycache1@163.com"  # 邮件接收人
     # subject = '测试监测结果'  # 邮件主题
     message['Subject'] = Header(subject, 'utf-8')
     try:
