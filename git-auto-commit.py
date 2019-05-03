@@ -19,11 +19,11 @@ import time
 
 def send_mail(subject, message):
     mail_host = "smtp.163.com"  # 设置邮件服务器
-    mail_user = "*****"  # 用户名
-    mail_pass = "****."  # 口令
+    mail_user = "electrycache1@163.com"  # 用户名
+    mail_pass = "21897594"  # 口令
 
-    sender = '*****@163.com'  # 发送邮件的邮箱
-    receivers = '"*****"@163.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
+    sender = 'electrycache1@163.com'  # 发送邮件的邮箱
+    receivers = 'electrycache1@163.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
 
     # 创建一个带附件的实例
     message = MIMEText(message, 'plain', 'utf-8')
@@ -63,6 +63,7 @@ def job():
 def main(h, m):
     '''h表示设定的小时，m为设定的分钟'''
     while True:
+        job()
         # 判断是否达到设定时间，例如0:00
         while True:
             now = datetime.datetime.now()
@@ -73,7 +74,7 @@ def main(h, m):
             # 不到时间就等20秒之后再次检测
             time.sleep(20)
         # 做正事，一天做一次
-        job()
+        #job()
 
 
 print(time.asctime(time.localtime(time.time())))
