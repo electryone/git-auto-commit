@@ -45,7 +45,7 @@ def job():
 #    f = open('content.txt', 'a')
 #    f.write(time.asctime(time.localtime(time.time())) + '\n')
 #    f.close()
-#    date = datetime.datetime.today().isoformat()[0:10]
+    date = datetime.datetime.today().isoformat()[0:10]
     #status = subprocess.run(["git", "status"])
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     if "fatal: unable to access" in str(status.stdout):
@@ -61,7 +61,7 @@ def job():
     if "fatal: unable to access" in str(gcom.stdout):
         print("network error")
         return False
-    print('commit message:{0}'.format(str(gadd.stdout)))
+    print('commit message:{0}'.format(str(gcom.stdout)))
     return True
         
 #    print(status)
