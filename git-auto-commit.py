@@ -57,7 +57,7 @@ def job():
     gpush = subprocess.run(["git", "push", "origin", "master"])
     print('**********git push done.**********')
     send_mail("git a commit", str(date))  # 发送邮件
-    time.sleep(61)
+    #time.sleep(61)
 
 
 def main(h, m):
