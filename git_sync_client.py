@@ -41,49 +41,35 @@ def send_mail(subject, message):
         print("Error: 无法发送邮件")
 
 
-def job():
-#    f = open('content.txt', 'a')
-#    f.write(time.asctime(time.localtime(time.time())) + '\n')
-#    f.close()
-    date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
-    #status = subprocess.run(["git", "status"])
-    status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if "fatal: unable to access" in str(status.stdout):
-        print("network error")
-        return False
-    elif "nothing to commit" in str(status.stdout):
-        print("nothing to commit, return")
-        return True
-    elif "no changes added to commit" in str(status.stdout):
-        gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#        print('add message:{0}'.format(str(gadd.stdout)))
-    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    if "fatal: unable to access" in str(gcom.stdout):
-        print("network error")
-        return False
-    print('commit message:{0}'.format(str(gcom.stdout)))
-    return True
-        
-#    print(status)
-#    print('**********start git add.**********')
-#    gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#    print(gadd)
-#    print('**********git add done.**********')
-#    print('**********start git commit.**********')
-#    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#    print(gcom)
-#    print('**********git commit done.**********')
-#    print('**********start git push.**********')
-#    gpush = subprocess.run(["git", "push", "origin", "master"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-#    print(gpush)
-#    print('**********git push done.**********')
-#    #send_mail("git a commit", str(date))  # 发送邮件
-    #time.sleep(61)
+origin1_arr =['https://github.com/electryone/git-auto-commit.git','origin','master']
+origin2_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master']
 
+def remote_job():
+    
+    date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
+    #处理origin1_arr
+    pull_status = subprocess.run(["git", "pull",'-r',origin1_arr[1],origin1_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if "fatal: unable to access" in str(pull_status.stdout):
+        print("network error")
+        return False
+    
+    push_status = subprocess.run(["git", "push",'-u',origin1_arr[1],origin1_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if "fatal: unable to access" in str(push_status.stdout):
+        print("network error")
+        return False
+    
+     #处理origin2_arr
+    pull2_status = subprocess.run(["git", "pull",'-r',origin2_arr[1],origin2_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if "fatal: unable to access" in str(pull2_status.stdout):
+        print("network error")
+        return False
+    
+    push2_status = subprocess.run(["git", "push",'-u',origin2_arr[1],origin2_arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    if "fatal: unable to access" in str(push2_status.stdout):
+        print("network error")
+        return False
 
 def main(h, m):
-    flag = job
-    
     '''h表示设定的小时，m为设定的分钟'''
     count = 0
     while True:
