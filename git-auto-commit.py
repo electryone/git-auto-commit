@@ -49,15 +49,18 @@ def job():
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print(status)
     print('**********start git add.**********')
-    gadd = subprocess.run(["git", "add", "."])
+    gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print(gadd)
     print('**********git add done.**********')
     print('**********start git commit.**********')
-    gcom = subprocess.run(["git", "commit", "-m" + date])
+    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print(gcom)
     print('**********git commit done.**********')
     print('**********start git push.**********')
-    gpush = subprocess.run(["git", "push", "origin", "master"])
+    gpush = subprocess.run(["git", "push", "origin", "master"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print(gpush)
     print('**********git push done.**********')
-    send_mail("git a commit", str(date))  # 发送邮件
+    #send_mail("git a commit", str(date))  # 发送邮件
     #time.sleep(61)
 
 
