@@ -20,10 +20,10 @@ origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','mast
 origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
 
 mail_host = "smtp.163.com"  # 设置邮件服务器
-mail_user = "electrycache1@163.com"  # 用户名
-mail_pass = "21897594"  # 口令
+mail_user = "*******@163.com"  # 用户名
+mail_pass = "*******"  # 口令
 sender = 'electrycache1@163.com'  # 发送邮件的邮箱
-receivers = 'electrycache1@163.com,21897594@qq.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
+receivers = 'electrycache1@163.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
 
 def send_mail(subject, message):
     # 创建一个带附件的实例
