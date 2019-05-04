@@ -17,7 +17,7 @@ import schedule
 import time
 
 origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
-origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master'，'连接云中心端网络']
+origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
 
 mail_host = "smtp.163.com"  # 设置邮件服务器
 mail_user = "electrycache1@163.com"  # 用户名
@@ -38,8 +38,8 @@ def send_mail(subject, message):
         smtpObj.login(mail_user, mail_pass)
         smtpObj.sendmail(sender, receivers, message.as_string())
         print("邮件发送成功")
-    except smtplib.SMTPException:
-        print("Error: 无法发送邮件")
+    except Exception as e:
+        print("Error: 无法发送邮件:{0}".format(e))
 
 
 def remote_job(arr):
@@ -58,8 +58,7 @@ def remote_job(arr):
     return flag1
 
 
-def main(h, m):
-    '''h表示设定的小时，m为设定的分钟'''
+def main():
     count1= 0
     count2= 0
     while True:
@@ -90,16 +89,16 @@ def main(h, m):
         if(count1 >0 or count2 >0):
             print("network fail count1 {0} count2{1}, send message".format(count1,count2))
             date =time.asctime(time.localtime(time.time()))
-            string = 'git issue:'
+            string = '出现同步问题---'
             if(count1 >0):
-                string += "network error: {0} \n".format(origin1_arr[3])
+                string += "网络出现错误: {0} \n".format(origin1_arr[3])
             if(count2 >0):
-                string += "network error: {0} \n".format(origin2_arr[3])   
-            send_mail('git issue', string)  # 发送邮件
+                string += "网络出现错误: {0} \n".format(origin2_arr[3])   
+            send_mail('同步问题', string)  # 发送邮件
         else:
             print("check ok")
         break
 
 
 print(time.asctime(time.localtime(time.time())))
-main(23, 55)
+main()
