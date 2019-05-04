@@ -16,19 +16,20 @@ import re
 import schedule
 import time
 
+origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
+origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master'，'连接云中心端网络']
+
+mail_host = "smtp.163.com"  # 设置邮件服务器
+mail_user = "electrycache1@163.com"  # 用户名
+mail_pass = "21897594"  # 口令
+sender = 'electrycache1@163.com'  # 发送邮件的邮箱
+receivers = 'electrycache1@163.com,21897594@qq.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
 
 def send_mail(subject, message):
-    mail_host = "smtp.163.com"  # 设置邮件服务器
-    mail_user = "electrycache1@163.com"  # 用户名
-    mail_pass = "21897594"  # 口令
-
-    sender = 'electrycache1@163.com'  # 发送邮件的邮箱
-    receivers = 'electrycache1@163.com'  # 接收邮件的邮箱，可设置为你的QQ邮箱或者其他邮箱，多个邮箱用,分隔开来
-
     # 创建一个带附件的实例
     message = MIMEText(message, 'plain', 'utf-8')
-    message['From'] = "electrycache1@163.com"  # 邮件发送人
-    message['To'] = "electrycache1@163.com"  # 邮件接收人
+    message['From'] = sender  # 邮件发送人
+    message['To'] = receivers  # 邮件接收人
     # subject = '测试监测结果'  # 邮件主题
     message['Subject'] = Header(subject, 'utf-8')
     try:
@@ -40,9 +41,6 @@ def send_mail(subject, message):
     except smtplib.SMTPException:
         print("Error: 无法发送邮件")
 
-
-origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master']
-origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master']
 
 def remote_job(arr):
     #date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
@@ -94,9 +92,9 @@ def main(h, m):
             date =time.asctime(time.localtime(time.time()))
             string = 'git issue:'
             if(count1 >0):
-                string += "network error: {0} \n".format(origin1_arr[0])
+                string += "network error: {0} \n".format(origin1_arr[3])
             if(count2 >0):
-                string += "network error: {0} \n".format(origin2_arr[0])   
+                string += "network error: {0} \n".format(origin2_arr[3])   
             send_mail('git issue', string)  # 发送邮件
         else:
             print("check ok")
