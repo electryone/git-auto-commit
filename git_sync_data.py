@@ -62,7 +62,7 @@ def remote_job(arr):
         return True
     else:
         gadd = subprocess.check_output(["git", "add", "."],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    gcom = subprocess.check_output(["git", "commit", "-m" + date],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print('commit message:{0}'.format(str(gcom)))
     push_status = subprocess.check_output(["git", "push",'-u',arr[1],arr[2]],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     logger.info("git push:{0}".format(str(push_status)))
