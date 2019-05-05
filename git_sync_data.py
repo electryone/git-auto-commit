@@ -99,7 +99,7 @@ logger.setLevel(logging.INFO)
 fh = logging.FileHandler('git_sync_data.log') 
 fh.setLevel(logging.INFO)    
 # 定义handler的输出格式 
-formatter = logging.Formatter('[%(asctime)s][%(filename)s][line: %(lineno)d][%(levelname)s] ## %(message)s')
+formatter = logging.Formatter('[%(asctime)s]%(levelname)s# %(message)s')
 fh.setFormatter(formatter) 
 logger.addHandler(fh) 
 print(time.asctime(time.localtime(time.time())))
