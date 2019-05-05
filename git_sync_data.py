@@ -16,8 +16,8 @@ import re
 import schedule
 import time
 
-#origin1_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
-origin2_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
+#origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
+origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
 send_flag =True
 mail_host = "smtp.163.com"  # 设置邮件服务器
 mail_user = "*******@163.com"  # 用户名
