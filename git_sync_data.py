@@ -104,5 +104,5 @@ logger.addHandler(fh)
 print(time.asctime(time.localtime(time.time())))
 main()
 #  添加下面一句，在记录日志之后移除句柄
-fh.flush()
+#fh.flush()
 logger.removeHandler(fh)
