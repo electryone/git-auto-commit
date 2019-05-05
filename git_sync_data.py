@@ -45,29 +45,29 @@ def send_mail(subject, message):
 
 def remote_job(arr):
     date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
-    pull_status = subprocess.run(["git", "pull",'-f',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    logger.info("git pull:{0}".format(str(pull_status.stdout)))
-    if "fatal: unable to access" in str(pull_status.stdout):
+    pull_status = subprocess.check_output(["git", "pull",'-f',arr[1],arr[2]],shell=False) #, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git pull:{0}".format(str(pull_status)))
+    if "fatal: unable to access" in str(pull_status):
         print("network error")
         return False
     
     #判别是否提交本地版本
-    status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    logger.info("git satus:{0}".format(str(status.stdout)))
-    if "fatal: " in str(status.stdout):
-        print("network error:{0}".format(str(status.stdout)))
+    status = subprocess.check_output(["git", "status"],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git satus:{0}".format(str(status)))
+    if "fatal: " in str(status):
+        print("network error:{0}".format(str(status)))
         return False
-    elif "nothing to commit" in str(status.stdout):
+    elif "nothing to commit" in str(status):
         print("nothing to commit, return")
         return True
     else:
-        gadd = subprocess.run(["git", "add", "."],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    print('commit message:{0}'.format(str(gcom.stdout)))
-    push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-    logger.info("git push:{0}".format(str(push_status.stdout)))
-    if "fatal: " in str(push_status.stdout):
-        print("network error:{0}".format(str(status.stdout)))
+        gadd = subprocess.check_output(["git", "add", "."],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    gcom = subprocess.run(["git", "commit", "-m" + date],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    print('commit message:{0}'.format(str(gcom)))
+    push_status = subprocess.check_output(["git", "push",'-u',arr[1],arr[2]],shell=False)#, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git push:{0}".format(str(push_status)))
+    if "fatal: " in str(push_status):
+        print("network error:{0}".format(str(status)))
         return False
     return True
 
