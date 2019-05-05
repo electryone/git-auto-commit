@@ -16,8 +16,8 @@ import re
 import schedule
 import time
 
-#origin2_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
-origin1_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
+origin_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
+#origin_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
 send_flag =True
 mail_host = "smtp.163.com"  # 设置邮件服务器
 mail_user = "*******@163.com"  # 用户名
@@ -70,19 +70,19 @@ def remote_job(arr):
 
 def main():
     while True:
-        flag = remote_job(origin1_arr)
+        flag = remote_job(origin_arr)
         if(flag):
-            print("check {0} ok".format(origin1_arr[0]))
+            print("check {0} ok".format(origin_arr[0]))
             
         else:
             time.sleep(5)
-            flag = remote_job(origin1_arr)
-            if(flag == Flase):
-                print("network fail count1 {0} count2{1}, send message".format(count1,count2))
+            flag = remote_job(origin_arr)
+            if(flag == False):
                 date =time.asctime(time.localtime(time.time()))
+                string = '出现同步问题---'
+                string += "网络出现错误: {0} \n".format(origin_arr[3])
+                print(string)
                 if(send_flag):
-                    string = '出现同步问题---'
-                    string += "网络出现错误: {0} \n".format(origin1_arr[3])
                     send_mail('同步问题', string)  # 发送邮件
             else:
                 print("check ok")
