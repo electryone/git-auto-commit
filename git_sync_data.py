@@ -71,7 +71,6 @@ def remote_job(arr):
         return False
     return True
 
-
 def main():
     while True:
         flag = remote_job(origin_arr)
@@ -97,9 +96,9 @@ def main():
 logger = logging.getLogger('logger') 
 logger.setLevel(logging.INFO) 
 fh = logging.FileHandler('git_sync_data.log') 
-fh.setLevel(logging.INFO)    
+fh.setLevel(logging.INFO)
 # 定义handler的输出格式 
-formatter = logging.Formatter('[%(asctime)s]%(levelname)s# %(message)s')
+formatter = logging.Formatter('[%(asctime)s][%(lineno)d]%(levelname)s# %(message)s')
 fh.setFormatter(formatter) 
 logger.addHandler(fh) 
 print(time.asctime(time.localtime(time.time())))
