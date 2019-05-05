@@ -54,8 +54,8 @@ def remote_job(arr):
     #判别是否提交本地版本
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     logger.info("git satus:{0}".format(str(status.stdout)))
-    if "fatal: unable to access" in str(status.stdout):
-        print("network error")
+    if "fatal: " in str(status.stdout):
+        print("network error:{0}".format(str(status.stdout)))
         return False
     elif "nothing to commit" in str(status.stdout):
         print("nothing to commit, return")
@@ -66,8 +66,8 @@ def remote_job(arr):
     print('commit message:{0}'.format(str(gcom.stdout)))
     push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     logger.info("git push:{0}".format(str(push_status.stdout)))
-    if "fatal: unable to access" in str(push_status.stdout):
-        print("network error")
+    if "fatal: " in str(push_status.stdout):
+        print("network error:{0}".format(str(status.stdout)))
         return False
     return True
 
@@ -84,7 +84,7 @@ def main():
             if(flag == False):
                 date =time.asctime(time.localtime(time.time()))
                 string = '出现同步问题---'
-                string += "网络出现错误: {0} \n".format(origin_arr[3])
+                string += "网络或者程序出现错误: {0} \n".format(origin_arr[3])
                 print(string)
                 logger.error("error:{0}".format(string))
                 if(send_flag):
