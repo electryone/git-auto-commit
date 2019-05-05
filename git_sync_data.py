@@ -15,6 +15,7 @@ from email.header import Header
 import re
 import schedule
 import time
+import logging
 
 origin_arr =['https://github.com/electryone/git-auto-commit.git','origin','master','连接96端网络']
 #origin_arr = ['http://admin@127.0.0.1:10010/r/git_sync.git','origin2','master','连接云中心端网络']
@@ -45,12 +46,14 @@ def send_mail(subject, message):
 def remote_job(arr):
     date =time.asctime(time.localtime(time.time())) # datetime.datetime.today().isoformat()[0:10]
     pull_status = subprocess.run(["git", "pull",'-f',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git pull:{0}".format(str(pull_status.stdout)))
     if "fatal: unable to access" in str(pull_status.stdout):
         print("network error")
         return False
     
     #判别是否提交本地版本
     status = subprocess.run(["git", "status"],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git satus:{0}".format(str(status.stdout)))
     if "fatal: unable to access" in str(status.stdout):
         print("network error")
         return False
@@ -62,6 +65,7 @@ def remote_job(arr):
     gcom = subprocess.run(["git", "commit", "-m" + date],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
     print('commit message:{0}'.format(str(gcom.stdout)))
     push_status = subprocess.run(["git", "push",'-u',arr[1],arr[2]],shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+    logger.info("git push:{0}".format(str(push_status.stdout)))
     if "fatal: unable to access" in str(push_status.stdout):
         print("network error")
         return False
@@ -82,11 +86,21 @@ def main():
                 string = '出现同步问题---'
                 string += "网络出现错误: {0} \n".format(origin_arr[3])
                 print(string)
+                logger.error("error:{0}".format(string))
                 if(send_flag):
                     send_mail('同步问题', string)  # 发送邮件
             else:
                 print("check ok")
         break
 
+#输出日志到 check_ftp_file_and_mial.log
+logger = logging.getLogger('logger') 
+logger.setLevel(logging.INFO) 
+fh = logging.FileHandler('git_sync_data.log') 
+fh.setLevel(logging.INFO)    
+# 定义handler的输出格式 
+formatter = logging.Formatter('[%(asctime)s][%(filename)s][line: %(lineno)d][%(levelname)s] ## %(message)s')
+fh.setFormatter(formatter) 
+logger.addHandler(fh) 
 print(time.asctime(time.localtime(time.time())))
 main()
